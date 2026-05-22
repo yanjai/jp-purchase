@@ -470,6 +470,11 @@ function ItemCard({
   const [imgOpen, setImgOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const navigation = useNavigation();
+  const isDeleting =
+    navigation.state === "submitting" &&
+    navigation.formData?.get("intent") === "delete" &&
+    navigation.formData?.get("id") === item.id;
 
   return (
     <>
@@ -497,7 +502,15 @@ function ItemCard({
           )}
         </div>
 
-        {confirmDelete ? (
+        {isDeleting ? (
+          <div className="flex items-center gap-1.5 text-sm" style={{ color: C.textMuted }}>
+            <svg className="animate-spin w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" opacity="0.25"/>
+              <path fill="currentColor" opacity="0.75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+            刪除中…
+          </div>
+        ) : confirmDelete ? (
           <div className="flex gap-1">
             <Form method="post">
               <input type="hidden" name="intent" value="delete" />
