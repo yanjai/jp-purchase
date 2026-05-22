@@ -281,10 +281,6 @@ export default function Home() {
                   </Field>
                 </div>
 
-                <Field id="f-image" label="圖片連結">
-                  <TextInput id="f-image" name="image" type="url" placeholder="https://..." />
-                </Field>
-
                 <Field id="f-link" label="參考連結">
                   <TextInput id="f-link" name="link" type="url" placeholder="https://..." />
                 </Field>
