@@ -5,7 +5,8 @@ const SHEET_GID = process.env.GOOGLE_SHEET_GID
   ? parseInt(process.env.GOOGLE_SHEET_GID)
   : undefined;
 
-export { CATEGORIES, type Category } from "./constants";
+import { CATEGORIES, type Category } from "./constants";
+export { CATEGORIES, type Category };
 
 function getAuth() {
   const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY!);
