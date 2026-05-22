@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Form, useLoaderData, useNavigation } from "react-router";
+import { Form, isRouteErrorResponse, useLoaderData, useNavigation, useRouteError } from "react-router";
 import type { Route } from "./+types/home";
 import {
   getItems,
@@ -11,6 +11,21 @@ import {
 } from "../lib/sheets.server";
 import { CATEGORIES } from "../lib/constants";
 
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const message = isRouteErrorResponse(error)
+    ? error.data
+    : (error as Error)?.message ?? "未知錯誤";
+  return (
+    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+      <h1 style={{ color: "#c00" }}>⚠️ 發生錯誤</h1>
+      <pre style={{ background: "#f5f5f5", padding: "1rem", borderRadius: "8px", whiteSpace: "pre-wrap" }}>
+        {message}
+      </pre>
+    </div>
+  );
+}
+
 export function meta() {
   return [
     { title: "日本代購清單 🇯🇵" },
@@ -19,9 +34,13 @@ export function meta() {
 }
 
 export async function loader() {
-  await setupSheet();
-  const items = await getItems();
-  return { items };
+  try {
+    await setupSheet();
+    const items = await getItems();
+    return { items };
+  } catch (err) {
+    throw new Response((err as Error).message ?? "載入失敗", { status: 500 });
+  }
 }
 
 export async function action({ request }: Route.ActionArgs) {
