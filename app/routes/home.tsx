@@ -333,7 +333,7 @@ export default function Home() {
         {pending.length > 0 && (
           <section className="space-y-5">
             <h2 className="text-sm font-bold uppercase tracking-widest px-1" style={{ color: C.textLight }}>
-              待購買 ({pending.length})
+              未購買 ({pending.length})
             </h2>
             {Array.from(pendingGroups.entries()).map(([cat, catItems]) => (
               <div key={cat}>
@@ -517,7 +517,7 @@ function ItemCard({
           {item.purchased ? (
             <span className="shrink-0 text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#D1FAE5", color: "#065F46" }}>已購買</span>
           ) : (
-            <span className="shrink-0 text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#DBEAFE", color: "#1E40AF" }}>待購買</span>
+            <span className="shrink-0 text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#DBEAFE", color: "#1E40AF" }}>未購買</span>
           )}
         </div>
 
