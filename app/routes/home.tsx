@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Form, isRouteErrorResponse, useLoaderData, useNavigation, useRouteError } from "react-router";
+import { Form, isRouteErrorResponse, useActionData, useLoaderData, useNavigation, useRouteError } from "react-router";
 import type { Route } from "./+types/home";
 import {
   getItems,
@@ -37,7 +37,8 @@ export async function loader() {
   try {
     await setupSheet();
     const items = await getItems();
-    return { items };
+    const pinRequired = !!process.env.ADD_PIN;
+    return { items, pinRequired };
   } catch (err) {
     throw new Response((err as Error).message ?? "載入失敗", { status: 500 });
   }
@@ -48,6 +49,10 @@ export async function action({ request }: Route.ActionArgs) {
   const intent = formData.get("intent") as string;
 
   if (intent === "add") {
+    const pin = process.env.ADD_PIN;
+    if (pin && formData.get("pin") !== pin) {
+      return { error: "密碼錯誤" };
+    }
     await addItem({
       name: (formData.get("name") as string).trim(),
       category: ((formData.get("category") as string) ?? "").trim(),
@@ -147,7 +152,8 @@ function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
 }
 
 export default function Home() {
-  const { items } = useLoaderData<typeof loader>();
+  const { items, pinRequired } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -287,6 +293,19 @@ export default function Home() {
                   <TextInput id="f-notes" name="notes" placeholder="顏色、規格、特別要求…" />
                 </Field>
               </div>
+
+              {pinRequired && (
+                <div className="mt-4">
+                  <Field id="f-pin" label="加入密碼" required>
+                    <TextInput id="f-pin" name="pin" type="password" placeholder="請輸入密碼" autoComplete="off" />
+                  </Field>
+                  {actionData && "error" in actionData && (
+                    <p className="text-sm font-semibold mt-2" style={{ color: "#EF4444" }}>
+                      {actionData.error}
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div className="flex gap-3 mt-6">
                 <button
