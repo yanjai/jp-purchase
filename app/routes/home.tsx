@@ -8,8 +8,8 @@ import {
   togglePurchased,
   deleteItem,
   setupSheet,
-  CATEGORIES,
 } from "../lib/sheets.server";
+import { CATEGORIES } from "../lib/constants";
 
 export function meta() {
   return [
