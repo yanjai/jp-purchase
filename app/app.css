@@ -14,6 +14,19 @@ body {
   background-color: #f0f4f8;
   color: #1a2a3a;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('/123.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.07;
+  z-index: 0;
+  pointer-events: none;
 }
 
 input, textarea, select {
