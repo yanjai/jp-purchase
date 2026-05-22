@@ -282,7 +282,7 @@ export default function Home() {
                 </div>
 
                 <Field id="f-link" label="參考連結">
-                  <TextInput id="f-link" name="link" type="url" placeholder="https://..." />
+                  <TextInput id="f-link" name="image" type="url" placeholder="https://..." />
                 </Field>
 
                 <Field id="f-notes" label="備註">
