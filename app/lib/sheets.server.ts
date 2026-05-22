@@ -9,6 +9,7 @@ export { CATEGORIES, type Category } from "./constants";
 
 function getAuth() {
   const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY!);
+  credentials.private_key = credentials.private_key.replace(/\\n/g, "\n");
   return new google.auth.GoogleAuth({
     credentials,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
